@@ -18,7 +18,7 @@ gem "patiently"
 
 Patiently does not depend on RSpec, but if you use it, wire the helpers into your
 specs. Either require the bundled integration, which includes the helpers into
-feature specs:
+feature and system specs:
 
 ```ruby
 # spec/spec_helper.rb (or rails_helper.rb)
@@ -30,6 +30,7 @@ or include the helpers yourself with whatever scope you like:
 ```ruby
 RSpec.configure do |config|
   config.include(Patiently::Helpers, type: :feature)
+  config.include(Patiently::Helpers, type: :system)
 end
 ```
 

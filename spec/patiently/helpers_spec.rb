@@ -124,6 +124,22 @@ describe Patiently::Helpers do
 
         expect { host.patiently(0.05) { raise "boom" } }.to raise_error("boom")
       end
+
+      it "honors a positional timeout of 0 instead of falling back to the default" do
+        # Guards against `timeout ||= config.timeout` swallowing a truthy 0.
+        Patiently.config.timeout = 100 # would loop far longer if 0 were replaced
+
+        attempts = 0
+        expect do
+          host.patiently(0) do
+            attempts += 1
+            raise "boom"
+          end
+        end.to raise_error("boom")
+
+        # first call + min_retries(1)
+        expect(attempts).to eq(2)
+      end
     end
 
     describe "frozen-in-time detection" do
