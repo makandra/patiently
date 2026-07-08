@@ -25,11 +25,15 @@ suites.
   Ruby (`rbenv shell 2.7.8`, or just your default 3.x) — both are expected to pass.
 - CI (`.github/workflows/test.yml`) runs a **matrix** across 2.7 / 3.0 / 3.2 / 3.4
   and `head`. We do NOT use gemika/appraisals — one `Gemfile`, one `Gemfile.lock`.
-- `Gemfile.lock` **is committed** and was generated under **Ruby 2.7.8 with
-  bundler 2.1.4** so `BUNDLED WITH` stays readable on every matrix Ruby. If you
-  change dependencies, regenerate the lock under the oldest supported Ruby:
-  `RBENV_VERSION=2.7.8 bundle _2.1.4_ install` — otherwise a newer bundler pin
-  breaks the 2.7 CI job.
+- `Gemfile.lock` **is committed**. CI uses `bundler-cache: true`, which installs
+  the exact bundler from the lock's `BUNDLED WITH` on every matrix Ruby — so that
+  version must run on the whole matrix (2.7 → 3.4). The **2.4.x** line is the only
+  one that spans it: 2.1.x crashes on Ruby 3.4+ (`DidYouMean::SPELL_CHECKERS`),
+  and 2.5+ dropped Ruby 2.7. We pin **bundler 2.4.22**. If you change
+  dependencies, regenerate the lock under the oldest supported Ruby with that
+  bundler: `RBENV_VERSION=2.7.8 bundle _2.4.22_ install` (run
+  `gem install bundler -v 2.4.22` first if missing). Do not let a newer bundler
+  rewrite `BUNDLED WITH`, or the 3.4 / 2.7 CI jobs break.
 
 ## Running tests
 
