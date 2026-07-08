@@ -14,6 +14,12 @@
   </picture>
 </p>
 
+<p>
+  <a href="https://github.com/makandra/patiently/actions">
+    <img alt="Tests" src="https://github.com/makandra/patiently/actions/workflows/test.yml/badge.svg">
+  </a>
+</p>
+
 `patiently` retries a block of code until it stops raising an exception (or
 returns a truthy value). It is most useful in tests that need to wait for an
 eventually-consistent condition — a background job to finish, an AJAX request to
